@@ -9,18 +9,18 @@ def Get_information_in_file():
         json.dump(response.text,json_file,indent=2)
 """
 
-def Get_information_from_site():
+def get_information_from_site():
     response=requests.get("https://jsonplaceholder.typicode.com/todos")
     result=json.loads(response.text)
     return result
 
-def Write_information_in_file(input_information):
+def write_information_in_file(input_information):
     file=open("json_1.txt" , "w")
     file.write(str(input_information))
     file.close()
 
-def Q_ty_of_users(input_information):
-    Write_information_in_file(input_information)
+def q_ty_of_users(input_information):
+    write_information_in_file(input_information)
     list_for_work=input_information
     users = []
     every_user_tasks = []
@@ -35,16 +35,13 @@ def Q_ty_of_users(input_information):
             every_user_tasks.append([])
             complited_task.append([])
             uncomplited_task.append([])
-    for every_user in range(0 , len(users)):
-        for i in range(0 , len(list_for_work)):
-            data=list_for_work[i]
-            if users[every_user]==data["userId"]:
-                if data["title"] not in every_user_tasks[every_user]:  
-                    every_user_tasks[every_user].append(data["title"])
-                    if data["completed"] == True:
-                        complited_task[every_user].append("True")
-                    else:
-                        uncomplited_task[every_user].append("False")
+            flag_for_users=data["userId"]
+        if data["title"] not in every_user_tasks[flag_for_users-1]:
+            every_user_tasks[flag_for_users-1].append(data["title"])
+        if data["completed"] == True:
+            complited_task[flag_for_users-1].append("True")
+        else:
+            uncomplited_task[flag_for_users-1].append("False")
     for j in range(0 , len(users)):
         base_structure=dict(userId = users[j],title = every_user_tasks[j],completed = len(complited_task[j]))
         result.append(base_structure)
@@ -55,6 +52,6 @@ def Q_ty_of_users(input_information):
 
 """
 
-print(Q_ty_of_users(Get_information_from_site()))
-
+print(q_ty_of_users(get_information_from_site()))
 """
+
