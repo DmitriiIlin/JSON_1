@@ -19,39 +19,41 @@ def write_information_in_file(input_information):
     file.write(str(input_information))
     file.close()
 
+def base_structure_creater(data):
+    base_structure={} 
+    base_structure['userId']=data['userId']
+    if data['title'] != 'None':
+        base_structure['title']=1
+    else:
+        base_structure['title']=0
+    if data['completed'] == True:
+        base_structure['completed'] = 1
+    else:
+        base_structure['completed'] = 0
+    return base_structure
+    
+
 def q_ty_of_users(input_information):
     write_information_in_file(input_information)
     list_for_work=input_information
-    users = []
-    every_user_tasks = []
-    complited_task = []
-    uncomplited_task = []
-    result = []
+    base_result = []
+    idusers=[]
     base_structure={}
     for every_data in range(0 , len(list_for_work)):
         data = list_for_work[every_data]
-        if data["userId"] not in users:
-            users.append(data["userId"])
-            every_user_tasks.append([])
-            complited_task.append([])
-            uncomplited_task.append([])
-            flag_for_users=data["userId"]
-        if data["title"] not in every_user_tasks[flag_for_users-1]:
-            every_user_tasks[flag_for_users-1].append(data["title"])
-        if data["completed"] == True:
-            complited_task[flag_for_users-1].append("True")
-        else:
-            uncomplited_task[flag_for_users-1].append("False")
-    for j in range(0 , len(users)):
-        base_structure=dict(userId = users[j],title = every_user_tasks[j],completed = len(complited_task[j]))
-        result.append(base_structure)
-    return result
-    
-    
+        base_structure=base_structure_creater(data)
+        if len(base_result) == 0:       
+            base_result.append(base_structure)
+        else:            
+            if data['userId'] in idusers:
+                base_result[data['userId']-1]['title'] = base_result[data['userId']-1]['title'] + base_structure['title']
+                base_result[data['userId']-1]['completed'] = base_result[data['userId']-1]['completed'] + base_structure['completed']
+            else:
+                base_result.append(base_structure)  
+        idusers.append(data['userId'])
+    return base_result
 
-
-"""
-
+"""            
 print(q_ty_of_users(get_information_from_site()))
 """
 
